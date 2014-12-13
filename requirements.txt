@@ -1,0 +1,11 @@
+Django==1.7.1
+MySQL-python==1.2.5
+amqp==1.4.6
+anyjson==0.3.3
+billiard==3.3.0.19
+celery==3.1.17
+http://github.com/Yipit/django-chronograph/tarball/90789ff21db07d42c499e892242e1fdce340c5a2
+kombu==3.0.24
+python-dateutil==1.5
+pytz==2014.10
+wsgiref==0.1.2
