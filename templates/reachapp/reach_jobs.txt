@@ -1,0 +1,11 @@
+Reach App
+{{ subject }}
+
+{% for job in jobs %}
+  Job Score: {{ job.score }}
+  Position: {{ job.name }}
+  At: {{ job.employer_name }}
+  In: {{ job.location }}
+  View Job - {{ job.affiliate_url }}
+{% endfor %}
+

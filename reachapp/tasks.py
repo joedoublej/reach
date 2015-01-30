@@ -1,34 +1,50 @@
 import logging
 logger = logging.getLogger('emails')
 
-from util import task
-from announcement.engines import AnnouncementEmailEngine
-from announcement.models import AnnouncementLog
+from django.contrib.auth.models import User
 
+from celeryapp import app
+from reachapp.engine import ReachEmailEngine
+from reachapp.models import ReachEmail, ReachTracker
 
-@task
-def send_email(announcement_id, profile_id, template, text_template, context, **kwargs):
+@app.task
+def send_email(email_id, site_domain, test=False):
     """
     For a given user, send the appropriate email
     """
     logger.debug("Starting process to send email")
-    # TODO: Add business logic to get the appropriate user
+    reach_email = ReachEmail.objects.get(id=email_id)
 
-    # avoid dupe emails sent
-        log, created = AnnouncementLog.objects.get_or_create(announcement_id=announcement_id, user=user)
-    if not created:
-        logger.warning("Should not send announcement %s to %s twice.", announcement_id, user.email)
-        return
-    email = AnnouncementEmailEngine(user, log)
-
-    # Get user's city
-    city_list = profile.city.all()
-    if city_list:
-        context['city'] = city_list[0]
+    if test:
+        users = User.objects.filter(is_superuser=True)
     else:
-        # No city will blow up in templates that use city object
-        context['city'] = "Nation"
-    logger.debug("Rendering and sending announcement email...")
-    email.render(template, text_template, context)
-    email.send()
-    logger.debug("Email sent to %s", profile_id)
+        users = reach_email.users
+
+    user_ids = users.values_list('id', flat=True)
+
+    for user_id in user_ids:
+        send_email_to_user.delay(email_id, user_id, site_domain)
+
+@app.task
+def send_email_to_user(email_id, user_id, site_domain):
+
+    tracker, created = ReachTracker.objects.get_or_create(email_id=email_id, user_id=user_id)
+
+    if not created and tracker.is_sent:
+        logger.warning('Resending email {} to user {}'.format(email_id, user_id))
+        return
+
+    user = User.objects.get(id=user_id)
+    reach_email = ReachEmail.objects.get(id=email_id)
+
+    email = ReachEmailEngine(user, reach_email, tracker, site_domain)
+
+    template = 'reachapp/reach_jobs1.html'
+    text_template = 'reachapp/reach_jobs.txt'
+
+    logger.debug('Rendering and sending the email...')
+    email.render(template, text_template)
+    sent = email.send()
+    if sent:
+        logger.debug('Email {} sent to {}'.format(email_id, user_id))
+
