@@ -31,10 +31,15 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.staticfiles',
 
+    'authtools',
     'django_extensions',
 
     'reachapp'
 )
+
+# User
+AUTH_USER_MODEL = 'authtools.User'
+DEFAULT_PASSWORD = os.environ.get('DEFAULT_USER_PASSWORD')
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',

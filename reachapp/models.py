@@ -36,14 +36,14 @@ class ReachEmail(models.Model):
   title = models.CharField(max_length=255, null=True, blank=True, help_text='Internal title to keep track of emails')
   subject = models.CharField(max_length=225, blank=True, help_text='This will be displayed e.g.: Accountant Jobs in New York, NY')
   jobs = models.ManyToManyField('reachapp.JobPosting', related_name='email_jobs')
-  users = models.ManyToManyField('auth.User', related_name='email_users')
+  users = models.ManyToManyField('authtools.User', related_name='email_users')
   date_added = models.DateTimeField(auto_now_add=True, editable=False)
 
   def __str__(self):
     return self.subject
 
 class ReachTracker(models.Model):
-  user = models.ForeignKey('auth.User', null=False)
+  user = models.ForeignKey('authtools.User', null=False)
   email = models.ForeignKey('reachapp.ReachEmail', null=False)
   code = models.CharField(max_length=32, unique=True)
   date_sent = models.DateTimeField(auto_now_add=True)
@@ -65,7 +65,7 @@ class ReachTrackerLog(models.Model):
   """
   Model that keeps track
   """
-  user = models.ForeignKey('auth.User', null=False)
+  user = models.ForeignKey('authtools.User', null=False)
   job = models.ForeignKey('reachapp.JobPosting', null=False)
   tracker = models.ForeignKey('reachapp.ReachTracker')
   code = models.CharField(max_length=32, unique=True)
