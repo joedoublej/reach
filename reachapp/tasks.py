@@ -23,14 +23,14 @@ def send_email(email_id, site_domain, test=False):
     user_ids = users.values_list('id', flat=True)
 
     for user_id in user_ids:
-        send_email_to_user.delay(email_id, user_id, site_domain)
+        send_email_to_user.delay(email_id, user_id, site_domain, test=test)
 
 @app.task
-def send_email_to_user(email_id, user_id, site_domain):
+def send_email_to_user(email_id, user_id, site_domain, test=False):
 
     tracker, created = ReachTracker.objects.get_or_create(email_id=email_id, user_id=user_id)
 
-    if not created and tracker.is_sent:
+    if not created and tracker.is_sent and not test:
         logger.warning('Resending email {} to user {}'.format(email_id, user_id))
         return
 
