@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 from os.path import abspath, dirname, join
 import os
+import sys
+import urlparse
 
 BASE_DIR = dirname(dirname(__file__))
 PROJECT_ROOT = abspath(join(dirname(__file__), '../'))
@@ -20,8 +22,29 @@ LOCAL_FILE = lambda *path: join(PROJECT_ROOT, *path)
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'l&4=^61hdb8p_2)77uq275n=l82gqdp*&$+$p2q)c$7b!30kw('
 
+TEMPLATE_DEBUG = False
 DEBUG = False
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['*']
+
+# Development Settings
+if os.environ.get('DEVELOPMENT'):
+    TEMPLATE_DEBUG = True
+    DEBUG = True
+    ALLOWED_HOSTS = ['127.0.0.1']
+
+    # Celery
+    CELERY_ALWAYS_EAGER = True
+
+    # Logger
+    DEFAULT_LOGGER_DICT = {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    }
+else:
+    DEFAULT_LOGGER_DICT = {
+        'handlers': ['bugsnag'],
+        'level': 'INFO'
+    }
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -49,21 +72,10 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "bugsnag.django.middleware.BugsnagMiddleware",
+    'bugsnag.django.middleware.BugsnagMiddleware',
 )
 
 ROOT_URLCONF = 'reach.urls'
-
-# Database
-# https://docs.djangoproject.com/en/1.7/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'OPTIONS': {'init_command': 'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED',
-                    'compress': True}
-
-    }
-}
 
 # Internationalization
 SITE_ID = 1
@@ -97,13 +109,45 @@ TEMPLATE_DIRS = (
     join(PROJECT_ROOT, 'templates'),
 )
 
+# Database
+# https://docs.djangoproject.com/en/1.7/ref/settings/#databases
+urlparse.uses_netloc.append('mysql')
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {'init_command': 'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED',
+                    'compress': True}
+
+    }
+}
+
+try:
+    if os.environ.get('DEVELOPMENT'):
+        database_url = os.environ.get('DATABASE_URL')
+    else:
+        database_url = os.environ.get('CLEARDB_DATABASE_URL')
+
+    url = urlparse.urlparse(database_url)
+
+    # Ensure default database exists.
+    DATABASES['default'] = DATABASES.get('default', {})
+
+    # Update with environment configuration.
+    DATABASES['default'].update({
+        'NAME': url.path[1:],
+        'USER': url.username,
+        'PASSWORD': url.password,
+        'HOST': url.hostname,
+        'PORT': url.port,
+    })
+
+except Exception:
+    print 'Unexpected error:', sys.exc_info()
+
+
 # Loggers
 from bugsnag.handlers import BugsnagHandler
-
-DEFAULT_LOGGER_DICT = {
-    'handlers': ['bugsnag'],
-    'level': 'INFO'
-}
 
 LOGGING = {
     'version': 1,
@@ -142,6 +186,11 @@ BUGSNAG = {
   "notify_release_stages": ["production", "development"]
 }
 
+if os.environ.get('DEVELOPMENT'):
+    BUGSNAG['release_stage'] = "development"
+else:
+    BUGSNAG['release_stage'] = "production"
+
 # Email
 SERVER_EMAIL = 'Reach <server@reachapp.com>'
 DEFAULT_FROM_EMAIL = SERVER_EMAIL
@@ -155,5 +204,5 @@ EMAIL_USE_TLS = 1
 # Celery
 # CELERY_IMPORTS = ("tasks", )
 CELERY_RESULT_BACKEND = "amqp"
-BROKER_URL = "amqp://localhost:5672//"
+BROKER_URL = os.environ.get('CLOUDAMQP_URL', "amqp://localhost:5672//")
 CELERY_TASK_RESULT_EXPIRES = 300
