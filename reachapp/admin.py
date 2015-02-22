@@ -50,8 +50,6 @@ admin.site.register(JobPosting, JobPostingAdmin)
 admin.site.register(Employer, EmployerAdmin)
 admin.site.register(ReachEmail, EmailAdmin)
 
-
-
 User = get_user_model()
 
 class UserAdmin(NamedUserAdmin):

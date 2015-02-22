@@ -13,7 +13,7 @@ import sys
 import urlparse
 
 BASE_DIR = dirname(dirname(__file__))
-PROJECT_ROOT = abspath(join(dirname(__file__), '../'))
+PROJECT_ROOT = abspath(join(dirname(__file__), '../../'))
 LOCAL_FILE = lambda *path: join(PROJECT_ROOT, *path)
 
 # Quick-start development settings - unsuitable for production
@@ -180,6 +180,14 @@ LOGGING = {
         'emails': DEFAULT_LOGGER_DICT
     }
 }
+
+if os.environ.get('DEVELOPMENT'):
+    for logger in LOGGING['loggers']:
+        handlers = LOGGING['loggers'][logger]['handlers']
+        LOGGING['loggers'][logger]['handlers'] = []
+        LOGGING['loggers'][logger]['level'] = 'DEBUG'
+        LOGGING['loggers'][logger]['handlers'].append('console')
+
 
 # Bugsnag
 BUGSNAG = {

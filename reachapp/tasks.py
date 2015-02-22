@@ -2,6 +2,8 @@ import logging
 logger = logging.getLogger('emails')
 
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 from celeryapp import app
 from reachapp.engine import ReachEmailEngine
@@ -46,5 +48,5 @@ def send_email_to_user(email_id, user_id, site_domain, test=False):
     email.render(template, text_template)
     sent = email.send()
     if sent:
-        logger.debug('Email {} sent to {}'.format(email_id, user_id))
+        logger.debug('Email id {} sent to user_id {}'.format(email_id, user_id))
 
