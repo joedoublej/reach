@@ -14,7 +14,7 @@ table {
   border-spacing: 0;
 }
 td {
-  padding: 0;
+  padding: 0;       
   vertical-align: top;
 }
 .spacer,
@@ -910,7 +910,7 @@ ul{line-height:20px;Margin-bottom:20px}.wrapper .one-col-feature p,.wrapper .one
       <table class="header centered" style="border-collapse: collapse;border-spacing: 0;Margin-left: auto;Margin-right: auto;width: 602px">
         <tbody>
         <tr><td class="border" style="padding: 0;vertical-align: top;font-size: 1px;line-height: 1px;background-color: #ddd;width: 1px">&nbsp;</td></tr>
-        <tr><td class="logo" style="padding: 32px 0;vertical-align: top;mso-line-height-rule: at-least">
+        <tr><td class="logo" style="padding-bottom: 16px;vertical-align: top;mso-line-height-rule: at-least">
         <div class="logo-center" style="font-size: 26px;font-weight: 700;letter-spacing: -0.02em;line-height: 32px;color: #41637e;font-family: sans-serif;text-align: center" align="center" id="emb-email-header">
           <img style="border: 0;-ms-interpolation-mode: bicubic;display: block;Margin-left: auto;Margin-right: auto;max-width: 198px" src="http://res.cloudinary.com/hdmvd4ghj/image/upload/v1424396905/reachwebsize_ffzaqs.png" alt="Reach" width="150" height="45">
         </div></td></tr>
@@ -936,13 +936,12 @@ ul{line-height:20px;Margin-bottom:20px}.wrapper .one-col-feature p,.wrapper .one
                   <tbody>
                   {% for job in jobs %}
                     <tr>
-                      <td class="padded" style="padding: 0;font-family: sans-serif; margin-top: 24px; margin-bottom: 24px; padding-left: 22px;padding-right: 12px;font-size:36px">
-                        <div class="image" style="Margin-bottom: 24px;color: #565656;font-family: sans-serif;position:relative" align="center">
-                          <span style="padding-left: 22px;color: #565656; margin-bottom: 24px;margin-top: 24px;font-size:36px;font-weight:bold; position:absolute">{{ job.quality_score }}</span>
+                      <td class="padded" style="padding: 0;padding-left: 22px;vertical-align: top">
+                        <div style="padding-left: 22px;color: #565656;font-size:48px;font-weight:bold; position:absolute">{{ job.quality_score }}
                         </div>
                       </td>
                       <td class="padded" style="padding: 0;vertical-align: top;padding-left: 22px;padding-right: 22px">
-                        <h3 style="Margin-top: 0;color: #555;font-weight: normal;font-size: 18px;line-height: 24px;Margin-bottom: 16px;font-family: sans-serif"><strong style="font-weight: bold">{{ job.name }}</strong></h3><p style="Margin-top: 0;color: #565656;font-family: sans-serif;font-size: 16px;line-height: 24px;Margin-bottom: 24px">{{ job.employer_name }} - {{ job.location }}</p>
+                        <h3 style="Margin: 0;color: #555;font-weight: normal;font-size: 18px;line-height: 24px;font-family: sans-serif"><strong style="font-weight: bold">{{ job.name }}</strong></h3><p style="Margin-top: 0;color: #565656;font-family: sans-serif;font-size: 16px;line-height: 24px;Margin-bottom: 24px">{{ job.employer_name }} - {{ job.location }}</p>
                       </td>
                       <td class="padded" style="padding: 0;padding-left: 22px;padding-right: 22px">
                         <div class="btn" style="Margin-bottom: 24px;padding: 2px;text-align: center">
