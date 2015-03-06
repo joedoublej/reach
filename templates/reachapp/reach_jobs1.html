@@ -937,8 +937,16 @@ ul{line-height:20px;Margin-bottom:20px}.wrapper .one-col-feature p,.wrapper .one
                   {% for job in jobs %}
                     <tr>
                       <td class="padded" style="padding: 0;padding-left: 22px;vertical-align: top">
-                        <div style="padding-left: 22px;color: #565656;font-size:54px;font-weight:bold; position:absolute">{{ job.quality_score }}
+                      {% if job.quality_score < 40 %} 
+                        <div style="padding-left: 22px;color: #B53032;font-size:54px;font-weight:bold; position:absolute">{{ job.quality_score }}
                         </div>
+                      {% elif job.quality_score >= 40 and job.quality_score < 75 %} 
+                        <div style="padding-left: 22px;color: #daa520;font-size:54px;font-weight:bold; position:absolute">{{ job.quality_score }}
+                        </div>
+                      {% else %}
+                        <div style="padding-left: 22px;color: #36b06e;font-size:54px;font-weight:bold; position:absolute">{{ job.quality_score }}
+                        </div>
+                      {% endif %}
                       </td>
                       <td class="padded" style="padding-top: 1.7%;vertical-align: top;padding-left: 22px;padding-right: 22px">
                         <h3 style="Margin: 0;color: #555;font-weight: normal;font-size: 18px;line-height: 24px;font-family: sans-serif"><strong style="font-weight: bold">{{ job.name }}</strong></h3><p style="Margin-top: 0;color: #565656;font-family: sans-serif;font-size: 16px;line-height: 24px;Margin-bottom: 24px">{{ job.employer_name }} - {{ job.location }}</p>
