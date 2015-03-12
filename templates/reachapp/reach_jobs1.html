@@ -930,21 +930,25 @@ ul{line-height:20px;Margin-bottom:20px}.wrapper .one-col-feature p,.wrapper .one
             </tbody>
           </table>
           <table class="centered" style="border-collapse: collapse;border-spacing: 0;Margin-left: auto;Margin-right: auto;margin-top:30px;margin-bottom:30px;">
-            <tbody><tr>
+            <tbody>
+              <tr>
               <td style="padding: 0;vertical-align: top">
                 <table class="contents" style="border-collapse: collapse;border-spacing: 0;width: 100%">
+                  <th style="padding-left: 22px;color: black; text-align: left; font-size: 18px; font-weight: bold; border-bottom: solid 1px #565656">Quality</th>
+                  <th style="padding-left: 22px; color: black; text-align: left; font-size: 18px; font-weight: bold; border-bottom: solid 1px #565656">Job</th>
+                  <th style="padding-left: 22px; color: #565656; text-align: left; font-size: 18px; font-weight: bold; border-bottom: solid 1px #565656"></th>
                   <tbody>
                   {% for job in jobs %}
                     <tr>
-                      <td class="padded" style="padding: 0;padding-left: 22px;vertical-align: top">
+                      <td class="padded" style="padding: 0;padding-left: 10px;vertical-align: top">
                       {% if job.quality_score < 40 %} 
-                        <div style="padding-left: 22px;color: #B53032;font-size:54px;font-weight:bold; position:absolute">{{ job.quality_score }}
+                        <div style="padding-left: 10px;color: #B53032;font-size:54px;font-weight:bold; position:absolute">{{ job.quality_score }}
                         </div>
                       {% elif job.quality_score >= 40 and job.quality_score < 75 %} 
-                        <div style="padding-left: 22px;color: #daa520;font-size:54px;font-weight:bold; position:absolute">{{ job.quality_score }}
+                        <div style="padding-left: 10px;color: #daa520;font-size:54px;font-weight:bold; position:absolute">{{ job.quality_score }}
                         </div>
                       {% else %}
-                        <div style="padding-left: 22px;color: #36b06e;font-size:54px;font-weight:bold; position:absolute">{{ job.quality_score }}
+                        <div style="padding-left: 10px;color: #36b06e;font-size:54px;font-weight:bold; position:absolute">{{ job.quality_score }}
                         </div>
                       {% endif %}
                       </td>
