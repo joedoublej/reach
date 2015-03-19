@@ -33,7 +33,7 @@ def send_email_to_user(email_id, user_id, site_domain, test=False):
     tracker, created = ReachTracker.objects.get_or_create(email_id=email_id, user_id=user_id)
 
     if not created and tracker.is_sent and not test:
-        logger.warning('Resending email {} to user {}'.format(email_id, user_id))
+        logger.warning('Resending email {} to user {}. Email not sent.'.format(email_id, user_id))
         return
 
     user = User.objects.get(id=user_id)
