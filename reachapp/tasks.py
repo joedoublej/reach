@@ -18,6 +18,7 @@ def send_email(email_id, site_domain, test=False):
     reach_email = ReachEmail.objects.get(id=email_id)
 
     if test:
+        # Send to only superusers in the system
         users = User.objects.filter(is_superuser=True)
     else:
         users = reach_email.users
