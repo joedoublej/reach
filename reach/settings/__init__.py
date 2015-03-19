@@ -76,6 +76,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'reach.urls'
+WSGI_APPLICATION = 'reach.wsgi.application'
 
 # Internationalization
 SITE_ID = 1
