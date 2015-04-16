@@ -29,13 +29,13 @@ class EmployerAdmin(admin.ModelAdmin):
 def send_email(modeladmin, request, queryset):
     site_domain = get_current_site(request).domain
     for reach_email in queryset:
-        send_email_task.delay(reach_email.id, site_domain)
+        send_email_task(reach_email.id, site_domain)
 
 
 def send_test_email(modeladmin, request, queryset):
     site_domain = get_current_site(request).domain
     for reach_email in queryset:
-        send_email_task.delay(reach_email.id, site_domain, test=True)
+        send_email_task(reach_email.id, site_domain, test=True)
 
 class EmailAdmin(admin.ModelAdmin):
 
