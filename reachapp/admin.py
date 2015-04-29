@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.conf import settings
 from django.contrib import admin
-from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 
 from authtools.admin import NamedUserAdmin
@@ -19,6 +19,7 @@ class JobPostingAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'quality_score', 'date_added')
     list_filter = ['name', 'location', 'employer__name']
     list_per_page = 200
+
 
 class EmployerAdmin(admin.ModelAdmin):
 
@@ -37,6 +38,7 @@ def send_test_email(modeladmin, request, queryset):
     for reach_email in queryset:
         send_email_task(reach_email.id, site_domain, test=True)
 
+
 class EmailAdmin(admin.ModelAdmin):
 
     list_display = ('subject', 'date_added')
@@ -51,6 +53,7 @@ admin.site.register(Employer, EmployerAdmin)
 admin.site.register(ReachEmail, EmailAdmin)
 
 User = get_user_model()
+
 
 class UserAdmin(NamedUserAdmin):
     """
