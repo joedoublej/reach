@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 import smtplib
 
 from django.conf import settings
@@ -12,6 +11,7 @@ logger = logging.getLogger('emails')
 
 
 DEFAULT_SUBJECT = 'Your job digest for today'
+
 
 class ReachEmailEngine(object):
 
@@ -40,7 +40,7 @@ class ReachEmailEngine(object):
         job_dict['employer_name'] = job_posting.employer.name
         return job_dict
 
-    def _get_context(self, context = {}):
+    def _get_context(self, context={}):
         """
         Fill the context
         """

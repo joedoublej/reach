@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import logging
 logger = logging.getLogger('emails')
 
@@ -27,6 +28,7 @@ def send_email(email_id, site_domain, test=False):
 
     for user_id in user_ids:
         send_email_to_user(email_id, user_id, site_domain, test=test)
+
 
 @app.task
 def send_email_to_user(email_id, user_id, site_domain, test=False):
