@@ -1,14 +1,18 @@
 #!/usr/bin/env python
 import logging
-logger = logging.getLogger('emails')
+import requests
 
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-User = get_user_model()
+from xml.etree import ElementTree
 
 from celeryapp import app
 from reachapp.engine import ReachEmailEngine
-from reachapp.models import ReachEmail, ReachTracker
+from reachapp.models import Employer, JobPosting, ReachEmail, ReachTracker
+
+logger = logging.getLogger('emails')
+User = get_user_model()
+
 
 @app.task
 def send_email(email_id, site_domain, test=False):
@@ -53,3 +57,39 @@ def send_email_to_user(email_id, user_id, site_domain, test=False):
     if sent:
         logger.debug('Email id {} sent to user_id {}'.format(email_id, user_id))
 
+
+@app.task
+def fetch_jobs_from_indeed(job='job', zip_code='10011', ip_address='127.0.0.1'):
+    """
+    Make request to indeed.com XML feed to add to database
+    """
+    url_format = (
+        'http://api.indeed.com/ads/apisearch?publisher=3183403411213276&v=2'
+        '&format=xml&q={query}&l={zip_code}&jt=&limit=1000&fromage='
+        '&filter1=&latlong=1&userip={ip_address}&radius=100'
+        '&useragent=Mozilla/%2F5.0%28Chrome/42.0.2311.135'
+    )
+    response = requests.get(
+        url_format.format(query=job, zip_code=zip_code, ip_address=ip_address)
+    )
+    response_xml = response.content
+    root = ElementTree.fromstring(response_xml)
+    for result in root.findall('./results/result'):
+        job_data = parse_job_data(result)
+        job_data['employer'] = _get_or_create_employer(result.find('company').text)
+        JobPosting.objects.create(**job_data)
+
+
+def parse_job_data(result_dict):
+    job_data = {
+        'name': result_dict.find('jobtitle').text,
+        'description': result_dict.find('snippet').text,
+        'location': result_dict.find('formattedLocationFull').text,
+        'url': result_dict.find('url').text
+    }
+    return job_data
+
+
+def _get_or_create_employer(name):
+    employer, created = Employer.objects.get_or_create(**{'name': name})
+    return employer
