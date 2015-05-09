@@ -77,7 +77,12 @@ def fetch_jobs_from_indeed(job='job', zip_code='10011', ip_address='127.0.0.1'):
     for result in root.findall('./results/result'):
         job_data = parse_job_data(result)
         job_data['employer'] = _get_or_create_employer(result.find('company').text)
-        JobPosting.objects.create(**job_data)
+        job, created = JobPosting.objects.get_or_create(**job_data)
+        if not created:
+            logging.info("Duplicate job: {name}, Employer: {company}".format(
+                name=result.find('jobtitle').text,
+                company=result.find('company').text
+            ))
 
 
 def parse_job_data(result_dict):
