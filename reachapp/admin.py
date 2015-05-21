@@ -12,6 +12,7 @@ from authtools.admin import NamedUserAdmin
 from reachapp.forms import UserCreationForm
 from reachapp.models import JobPosting, Employer, ReachEmail
 from reachapp.tasks import send_email as send_email_task
+from reachapp.util import create_users_from_csv
 
 
 class JobPostingAdmin(admin.ModelAdmin):
@@ -55,6 +56,10 @@ admin.site.register(ReachEmail, EmailAdmin)
 User = get_user_model()
 
 
+def create_users_from_csv(modeladmin, request, queryset):
+    pass
+
+
 class UserAdmin(NamedUserAdmin):
     """
     A UserAdmin that sends a password-reset email when creating a new user,
@@ -76,6 +81,7 @@ class UserAdmin(NamedUserAdmin):
             'classes': ('collapse', 'collapse-closed'),
         }),
     )
+    actions = [create_users_from_csv]
 
     def save_model(self, request, obj, form, change):
         if not change and not obj.has_usable_password():

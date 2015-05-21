@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import logging
 import requests
+import socket
 
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
@@ -12,6 +13,7 @@ from reachapp.models import Employer, JobPosting, ReachEmail, ReachTracker
 
 logger = logging.getLogger('emails')
 User = get_user_model()
+JOBS_DICT = {}
 
 
 @app.task
@@ -59,6 +61,14 @@ def send_email_to_user(email_id, user_id, site_domain, test=False):
 
 
 @app.task
+def batch_jobs():
+    ip_address = socket.gethostbyname(socket.gethostname())
+    for job_title, zip_code in JOBS_DICT.items():
+        fetch_jobs_from_indeed(
+            job=job_title, zip_code=zip_code, ip_address=ip_address
+        )
+
+
 def fetch_jobs_from_indeed(job='job', zip_code='10011', ip_address='127.0.0.1'):
     """
     Make request to indeed.com XML feed to add to database
