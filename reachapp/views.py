@@ -15,3 +15,12 @@ class EmailClickView(View):
             log.is_clicked = True
             log.save()
         return HttpResponseRedirect(log.job.url)
+
+
+class EmailEventView(View):
+
+    def post(self, request, *args, **kwargs):
+        """
+        this is for the event webhook
+        """
+        pass
