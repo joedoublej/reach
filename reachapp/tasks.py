@@ -13,7 +13,11 @@ from reachapp.models import Employer, JobPosting, ReachEmail, ReachTracker
 
 logger = logging.getLogger('emails')
 User = get_user_model()
-JOBS_DICT = {}
+JOBS = [
+    ('staff accountant', 'new york, NY, US'),
+    ('software developer', 'boston, MA, US'),
+    ('nurse', 'chicago, IL, US')
+]
 
 
 @app.task
@@ -63,7 +67,7 @@ def send_email_to_user(email_id, user_id, site_domain, test=False):
 @app.task
 def batch_jobs():
     ip_address = socket.gethostbyname(socket.gethostname())
-    for job_title, zip_code in JOBS_DICT.items():
+    for job_title, zip_code in JOBS:
         fetch_jobs_from_indeed(
             job=job_title, zip_code=zip_code, ip_address=ip_address
         )

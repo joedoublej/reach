@@ -88,3 +88,30 @@ class ReachTrackerLog(models.Model):
     @property
     def affiliate_url(self):
         return 'emails/{}/{}'.format(self.tracker.code, self.code)
+
+
+class OpenEvent(models.Model):
+    """
+    Opens from the Mandrill event webhook
+    """
+    ip_address = models.ImageField()
+    sent_timestamp = models.DateTimeField()
+    user_email = models.CharField(max_length=100, null=True)
+
+
+class ClickEvent(models.Model):
+    """
+    Clicks from the Mandrill event webhook
+    """
+    click_url = models.CharField(max_length=100)
+    ip_address = models.ImageField()
+    sent_timestamp = models.DateTimeField()
+    user_email = models.CharField(max_length=100, null=True)
+
+
+class UnsubEvent(models.Model):
+    """
+    Unubs from the Mandrill event webhook
+    """
+    sent_timestamp = models.DateTimeField()
+    user_email = models.CharField(max_length=100, null=True)
