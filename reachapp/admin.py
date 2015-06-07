@@ -12,7 +12,6 @@ from authtools.admin import NamedUserAdmin
 from reachapp.forms import UserCreationForm
 from reachapp.models import JobPosting, Employer, ReachEmail
 from reachapp.tasks import send_email as send_email_task
-from reachapp.util import create_users_from_csv
 
 
 class JobPostingAdmin(admin.ModelAdmin):
