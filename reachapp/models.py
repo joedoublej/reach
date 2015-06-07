@@ -90,20 +90,22 @@ class ReachTrackerLog(models.Model):
         return 'emails/{}/{}'.format(self.tracker.code, self.code)
 
 
-class OpenEvent(models.Model):
-    """
-    Opens from the Mandrill event webhook
-    """
-    ip_address = models.ImageField()
-    sent_timestamp = models.DateTimeField()
-    user_email = models.CharField(max_length=100, null=True)
-
-
 class ClickEvent(models.Model):
     """
     Clicks from the Mandrill event webhook
     """
     click_url = models.CharField(max_length=100)
+    date = models.DateTimeField(auto_now=True)
+    ip_address = models.ImageField()
+    sent_timestamp = models.DateTimeField()
+    user_email = models.CharField(max_length=100, null=True)
+
+
+class OpenEvent(models.Model):
+    """
+    Opens from the Mandrill event webhook
+    """
+    date = models.DateTimeField(auto_now=True)
     ip_address = models.ImageField()
     sent_timestamp = models.DateTimeField()
     user_email = models.CharField(max_length=100, null=True)
@@ -113,5 +115,6 @@ class UnsubEvent(models.Model):
     """
     Unubs from the Mandrill event webhook
     """
+    date = models.DateTimeField(auto_now=True)
     sent_timestamp = models.DateTimeField()
     user_email = models.CharField(max_length=100, null=True)
