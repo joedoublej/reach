@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.http import HttpResonse, HttpResponseRedirect
 from django.views.generic.base import View
 
-from reachapp.events import handle_event
+# from reachapp.events import handle_event
 from reachapp.models import ReachTrackerLog
 
 
@@ -20,10 +20,16 @@ class EmailClickView(View):
 
 class EmailEventView(View):
 
+    def head(self, request):
+        """
+        for Mandrill verification
+        """
+        return HttpResonse()
+
     def post(self, request, *args, **kwargs):
         """
         this is for the event webhook
         """
-        event = request.POST.get('mandrill_events', {})
-        handle_event(event)
-        HttpResonse()
+        # event = request.POST.get('mandrill_events', {})
+        # handle_event(event)
+        return HttpResonse()
