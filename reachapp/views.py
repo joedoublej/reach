@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from __future__ import unicode_literals
 
-from django.http import HttpResonse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic.base import View
 
 # from reachapp.events import handle_event
@@ -24,7 +24,7 @@ class EmailEventView(View):
         """
         for Mandrill verification
         """
-        return HttpResonse()
+        return HttpResponse()
 
     def post(self, request, *args, **kwargs):
         """
@@ -32,4 +32,4 @@ class EmailEventView(View):
         """
         # event = request.POST.get('mandrill_events', {})
         # handle_event(event)
-        return HttpResonse()
+        return HttpResponse()
