@@ -64,8 +64,7 @@ def send_email_to_user(email_id, user_id, site_domain, test=False):
         logger.debug('Email id {} sent to user_id {}'.format(email_id, user_id))
 
 
-@app.task
-def batch_jobs():
+def fetch_jobs():
     ip_address = socket.gethostbyname(socket.gethostname())
     for job_title, zip_code in JOBS:
         fetch_jobs_from_indeed(
