@@ -21,6 +21,7 @@ class EmailClickView(View):
 
 class EmailEventView(View):
 
+    @csrf_exempt
     def head(self, request):
         """
         for Mandrill verification
