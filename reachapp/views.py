@@ -2,9 +2,10 @@
 from __future__ import unicode_literals
 
 from django.http import HttpResponse, HttpResponseRedirect
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import View
 
-# from reachapp.events import handle_event
+from reachapp.events import handle_event
 from reachapp.models import ReachTrackerLog
 
 
@@ -26,10 +27,11 @@ class EmailEventView(View):
         """
         return HttpResponse()
 
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         """
         this is for the event webhook
         """
-        # event = request.POST.get('mandrill_events', {})
-        # handle_event(event)
+        event = request.POST.get('mandrill_events', {})
+        handle_event(event)
         return HttpResponse()
