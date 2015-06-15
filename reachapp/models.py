@@ -23,7 +23,7 @@ class JobPosting(models.Model):
     description = models.TextField(max_length=1000, blank=True)
     location = models.CharField(max_length=150, blank=True)
     employer = models.ForeignKey('reachapp.Employer', null=False, blank=False)
-    url = models.URLField(blank=True)
+    url = models.URLField(max_length=300, blank=True)
     date_added = models.DateTimeField(auto_now_add=True, editable=False)
     last_modified = models.DateTimeField(auto_now=True)
 
