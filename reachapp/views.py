@@ -22,13 +22,15 @@ class EmailClickView(View):
 class EmailEventView(View):
 
     @csrf_exempt
+    def dispatch(self, *args, **kwargs):
+        return super(EmailEventView, self).dispatch(*args, **kwargs)
+
     def head(self, request):
         """
         for Mandrill verification
         """
         return HttpResponse()
 
-    @csrf_exempt
     def post(self, request, *args, **kwargs):
         """
         this is for the event webhook
